@@ -358,10 +358,9 @@ export default class Taskgregator extends Plugin {
       item.setTitle("Taskgregator: Priority").setIcon("flag");
       const levels: Array<[string, number]> = [
         ["None", 0],
-        ["P1 (high)", 1],
-        ["P2 (medium)", 2],
-        ["P3 (low)", 3],
+        ...this.settings.priorityTags.map((tag, index) => [`P${index + 1} (${tag})`, index + 1] as [string, number]),
       ];
+
       const sub = (item as unknown as { setSubmenu?: () => Menu }).setSubmenu?.();
       if (sub) {
         for (const [label, lvl] of levels) {
