@@ -150,7 +150,7 @@ export function renderTaskRow(parent: HTMLElement, task: TaskItem, ctx: TaskRowC
 function taskMenu(e: MouseEvent, task: TaskItem, ctx: TaskRowCtx): void {
   const menu = new Menu();
 
-  // Priority: submenu if the platform supports it, else flat P1..P3 + None.
+  // Priority: submenu if the platform supports it, else flat priorityTags list + None.
   menu.addItem((item) => {
     item.setTitle("Priority").setIcon("flag");
       const levels: Array<[string, number]> = [
@@ -172,8 +172,9 @@ function taskMenu(e: MouseEvent, task: TaskItem, ctx: TaskRowCtx): void {
       }
     } else {
       item.onClick(() => {
-        const cur = task.priority >= 1 && task.priority <= 3 ? task.priority : task.priority > 3 ? 3 : 0;
-        void setPrio((cur + 1) % 4);
+        const numberOfPriorityTags = ctx.writer.settings.priorityTags.length;
+        const cur = task.priority >= 1 && task.priority <= numberOfPriorityTags ? task.priority : task.priority > numberOfPriorityTags ? numberOfPriorityTags : 0;
+        void setPrio((cur + 1) % (numberOfPriorityTags + 1));
       });
     }
   });

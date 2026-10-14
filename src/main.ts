@@ -375,9 +375,10 @@ export default class Taskgregator extends Plugin {
         // Fallback: single click cycles priority.
         item.onClick(async () => {
           const cur = parseLine(get(), filePath, lineNo, this.settings)?.priority ?? 0;
-          const c = cur >= 1 && cur <= 3 ? cur : cur > 3 ? 3 : 0;
+          const numberOfPriorityTags = this.settings.priorityTags.length;
+          const c = cur >= 1 && cur <= numberOfPriorityTags? cur : cur > numberOfPriorityTags? numberOfPriorityTags: 0;
           const def = await this.writer.resolveDefaultFormat();
-          set(applyPriorityToLine(get(), (c + 1) % 4, this.settings.priorityTags, formatForLine(get(), def)));
+          set(applyPriorityToLine(get(), (c + 1) % (numberOfPriorityTags + 1), this.settings.priorityTags, formatForLine(get(), def)));
         });
       }
     });
